@@ -12,8 +12,8 @@ interface Invoice {
   id: number;
   name: string;
   senderEmail: string;
-  shippingAddress: string;
   recipientEmail: string;
+  shippingAddress: string;
   date: string; //number;
   dueDate: string; //number;
   invoiceNote: string;
@@ -27,8 +27,8 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
   const initialState = {
     name: '',
     senderEmail: '',
-    shippingAddress: '',
     recipientEmail: '',
+    shippingAddress: '',
     date: '',
     dueDate: '',
     invoiceNote: '',
@@ -38,12 +38,13 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
     total: 0,
   };
 
+  
   function reducer(state = initialState, { field, value }: { field: string, value: any }) {
     return { ...state, [field]: value };
   }
 
   const [formFields, dispatch] = useReducer(reducer, initialState);
-
+  
   useEffect(() => {
     if (selectedInvoice) {
       for (const [key, value] of Object.entries(selectedInvoice)) {
@@ -59,7 +60,6 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     dispatch({ field: name, value });
-    // dispatch({ field: e.target.name, value: e.target.value });
   };
 
   useEffect(() => {
@@ -70,13 +70,14 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
 
   const handleSendInvoice = async () => {
     try {
-      const { name, senderEmail, recipientEmail, shippingAddress, dueDate, date, invoiceNote, description, qty, rate, total } = formFields;
-  
+      const { name, senderEmail, recipientEmail, date, dueDate, shippingAddress, invoiceNote, description, qty, rate, total } = formFields;
+
       if (selectedInvoice) {
         // Update an existing invoice
-        await axios.put(`http://localhost:1337/api/invoices/${selectedInvoice.id}`, {
+        const data = await axios.put(`http://localhost:1337/api/invoices/${selectedInvoice.id}`, {
           data: { name, senderEmail, recipientEmail, shippingAddress, dueDate, date, invoiceNote, description, qty, rate, total },
         });
+        console.log(data)
         setInvoices((prev) => prev.map((inv) => (inv.id === selectedInvoice.id ? { ...inv, ...formFields } : inv)));
       } else {
         // Create a new invoice
@@ -86,14 +87,14 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
         console.log(data);
         setInvoices((prev) => [...prev, data.data]);
       }
-  
+
       onClose();
     } catch (error) {
       console.error(error);
     }
   };
 
-
+  
   return (
     <>
       <main className="fixed top-0 z-50 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
@@ -115,10 +116,10 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
                   id="name"
                   name="name"
                   type="text"
-                  required
                   placeholder="Sender's name"
                   onChange={handleInputChange}
                   value={formFields.name}
+                  required
                 />
               </div>
 
@@ -131,10 +132,10 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
                   id="senderEmail"
                   name="senderEmail"
                   type="email"
-                  required
                   placeholder="Sender's email"
                   onChange={handleInputChange}
                   value={formFields.senderEmail}
+                  required
                 />
               </div>
 
@@ -147,10 +148,10 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
                   id="recipientEmail"
                   name="recipientEmail"
                   type="email"
-                  required
                   placeholder="Client's email address"
                   onChange={handleInputChange}
                   value={formFields.recipientEmail}
+                  required
                 />
               </div>
             </div>
@@ -167,6 +168,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
                   type="date"
                   onChange={handleInputChange}
                   value={formFields.date}
+                  required
                 />
               </div>
 
@@ -181,6 +183,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
                   type="date"
                   onChange={handleInputChange}
                   value={formFields.dueDate}
+                  required
                 />
               </div>
             </div>
@@ -194,10 +197,10 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="shippingAddress"
                   name="shippingAddress"
-                  required
                   placeholder="Office address of recipient"
                   onChange={handleInputChange}
                   value={formFields.shippingAddress}
+                  required
                 />
               </div>
 
@@ -206,13 +209,13 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
                   Invoice Note
                 </label>
                 <textarea
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                   id="invoiceNote"
                   name="invoiceNote"
-                  required
                   placeholder="Account details"
                   onChange={handleInputChange}
                   value={formFields.invoiceNote}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                  required
                 />
               </div>
             </div>
@@ -226,9 +229,9 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
                   name="description"
                   type="text"
                   placeholder="Reason for invoice"
-                  required
                   onChange={handleInputChange}
                   value={formFields.description}
+                  required
                 />
               </label>
 
@@ -239,9 +242,9 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
                   id="qty"
                   name="qty"
                   type="number"
-                  required
                   onChange={handleInputChange}
                   value={formFields.qty}
+                  required
                 />
               </label>
 
@@ -252,13 +255,13 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
                   id="rate"
                   name="rate"
                   type="number"
-                  required
                   onChange={handleInputChange}
                   value={formFields.rate}
+                  required
                 />
               </label>
 
-             
+
               <div className="block text-gray-700 text-sm font-bold mb-2 w-full mr-5">
                 <label>Total</label>
                 <div className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight">

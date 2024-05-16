@@ -58,21 +58,6 @@ const Invoices: React.FC = () => {
     fetchInvoices();
   }, []);
 
-  const handleDeleteInvoice = async (id: number) => {
-    try {
-      alert("Are you sure you want to delete this invoice?")
-      await axios.delete(`http://localhost:1337/api/invoices/${id}`);
-      setInvoices(invoices.filter((invoice) => invoice.id !== id));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleEditInvoice = (invoice: Invoice) => {
-    setSelectedInvoice(invoice);
-    setIsInvoiceFormOpen(true);
-  };
-
   const handleOpenInvoiceForm = () => {
     setSelectedInvoice(null);
     setIsInvoiceFormOpen(true);
@@ -83,7 +68,23 @@ const Invoices: React.FC = () => {
     setIsInvoiceFormOpen(false);
   };
 
+  const handleEditInvoice = (invoice: Invoice) => {
+    setSelectedInvoice(invoice);
+    setIsInvoiceFormOpen(true);
+  };
 
+  const handleDeleteInvoice = async (id: number) => {
+    try {
+      alert("Are you sure you want to delete this invoice?")
+      await axios.delete(`http://localhost:1337/api/invoices/${id}`);
+      setInvoices(invoices.filter((invoice) => invoice.id !== id));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+//  console.log(selectedInvoice)
+ 
   const handleDownloadPDF = (invoice: Invoice) => {
     // const doc = new jsPDF();
     const doc = new PDFWithAutoTable();

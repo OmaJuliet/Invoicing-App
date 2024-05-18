@@ -247,7 +247,7 @@ const Invoices: React.FC = () => {
                     </button>
 
                     <button className="bg-green-500 px-2 py-2 rounded text-white hover:bg-green-600 ml-4"
-                      onClick={() => handleEditInvoice(invoice)}>
+                      onClick={() => handleEditInvoice(invoice?.attributes)}>
                       Edit invoice
                     </button>
                   </div>

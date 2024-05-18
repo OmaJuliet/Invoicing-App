@@ -38,6 +38,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
     total: 0,
   };
 
+  console.log("Selected Invoice: ", selectedInvoice);
   
   function reducer(state = initialState, { field, value }: { field: string, value: any }) {
     return { ...state, [field]: value };

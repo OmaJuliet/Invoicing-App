@@ -1,8 +1,6 @@
 'use client';
 import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
 import axios from 'axios';
-import { useModals } from "../context/StateContext"
-
 
 interface InvoiceFormProps {
   onClose: () => void;
@@ -12,8 +10,8 @@ interface InvoiceFormProps {
 
 interface Invoice {
   id: number;
-  attributes: {}
   name: string;
+  attributes: {}
   senderEmail: string;
   recipientEmail: string;
   shippingAddress: string;
@@ -36,11 +34,12 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
     dueDate: '',
     invoiceNote: '',
     description: '',
-    qty: 0,
-    rate: 0,
-    total: 0,
+    qty: '',
+    rate: '',
+    total: '',
   };
 
+  console.log("Selected Invoice: ", selectedInvoice);
   
   function reducer(state = initialState, { field, value }: { field: string, value: any }) {
     return { ...state, [field]: value };

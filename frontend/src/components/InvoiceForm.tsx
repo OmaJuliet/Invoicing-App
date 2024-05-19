@@ -1,6 +1,8 @@
 'use client';
 import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
 import axios from 'axios';
+import { useModals } from "../context/StateContext"
+
 
 interface InvoiceFormProps {
   onClose: () => void;
@@ -10,6 +12,7 @@ interface InvoiceFormProps {
 
 interface Invoice {
   id: number;
+  attributes: {}
   name: string;
   senderEmail: string;
   recipientEmail: string;
@@ -47,7 +50,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
   
   useEffect(() => {
     if (selectedInvoice) {
-      for (const [key, value] of Object.entries(selectedInvoice)) {
+      for (const [key, value] of Object.entries(selectedInvoice?.attributes)) {
         dispatch({ field: key, value });
       }
     } else {
@@ -79,6 +82,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
         });
         console.log(data)
         setInvoices((prev) => prev.map((inv) => (inv.id === selectedInvoice.id ? { ...inv, ...formFields } : inv)));
+        window.location.reload()
       } else {
         // Create a new invoice
         const { data } = await axios.post('http://localhost:1337/api/invoices', {

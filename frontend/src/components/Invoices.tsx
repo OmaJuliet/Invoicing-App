@@ -9,6 +9,7 @@ import { useModals } from '@/context/StateContext';
 interface Invoice {
   [x: string]: any;
   id: number;
+  attributes: {}
   name: string;
   senderEmail: string;
   recipientEmail: string;
@@ -145,10 +146,7 @@ const Invoices: React.FC = () => {
       )}
 
 
-      {isLoading ? ( 
-      <div>Loading...</div>
-      ) : (
-        invoices.length === 0 ? (
+      {invoices.length === 0 ? (
         <p>No invoice yet.</p>
         ) : (
           <div className="w-[70%]">
@@ -266,7 +264,7 @@ const Invoices: React.FC = () => {
 
                 </>
 
-              ))}
+              )}
             </div>
           </div>
         ))

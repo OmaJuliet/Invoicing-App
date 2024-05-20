@@ -11,11 +11,12 @@ interface InvoiceFormProps {
 interface Invoice {
   id: number;
   name: string;
+  attributes: {};
   senderEmail: string;
   recipientEmail: string;
   shippingAddress: string;
-  date: string; //number;
-  dueDate: string; //number;
+  date: string;
+  dueDate: string;
   invoiceNote: string;
   description: string;
   qty: number;
@@ -38,17 +39,15 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
     total: 0,
   };
 
-  console.log("Selected Invoice: ", selectedInvoice);
-  
   function reducer(state = initialState, { field, value }: { field: string, value: any }) {
     return { ...state, [field]: value };
   }
 
   const [formFields, dispatch] = useReducer(reducer, initialState);
-  
+
   useEffect(() => {
     if (selectedInvoice) {
-      for (const [key, value] of Object.entries(selectedInvoice)) {
+        for (const [key, value] of Object.entries(selectedInvoice?.attributes)) {
         dispatch({ field: key, value });
       }
     } else {
@@ -57,6 +56,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
       }
     }
   }, [selectedInvoice]);
+  
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -69,6 +69,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
     dispatch({ field: 'total', value: total });
   }, [formFields.qty, formFields.rate]);
 
+
   const handleSendInvoice = async () => {
     try {
       const { name, senderEmail, recipientEmail, date, dueDate, shippingAddress, invoiceNote, description, qty, rate, total } = formFields;
@@ -80,13 +81,14 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
         });
         console.log(data)
         setInvoices((prev) => prev.map((inv) => (inv.id === selectedInvoice.id ? { ...inv, ...formFields } : inv)));
+        window.location.reload()
       } else {
-        // Create a new invoice
-        const { data } = await axios.post('http://localhost:1337/api/invoices', {
-          data: { name, senderEmail, recipientEmail, shippingAddress, dueDate, date, invoiceNote, description, qty, rate, total },
-        });
-        console.log(data);
-        setInvoices((prev) => [...prev, data.data]);
+      // Create a new invoice
+      const { data } = await axios.post('http://localhost:1337/api/invoices', {
+        data: { name, senderEmail, recipientEmail, shippingAddress, dueDate, date, invoiceNote, description, qty, rate, total },
+      });
+      console.log(data);
+      setInvoices((prev) => [...prev, data.data]);
       }
 
       onClose();
@@ -95,7 +97,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
     }
   };
 
-  
+
   return (
     <>
       <main className="fixed top-0 z-50 left-0 w-screen h-screen flex justify-center items-center bg-black bg-opacity-50">
@@ -279,11 +281,9 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ onClose, setInvoices, selecte
                 className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 onClick={handleSendInvoice}
               >
-                {/* Send Invoice */}
                 {selectedInvoice ? 'Update Invoice' : 'Send Invoice'}
               </button>
             </div>
-
           </form>
         </section>
       </main>

@@ -11,8 +11,8 @@ interface Invoice {
   name: string;
   senderEmail: string;
   recipientEmail: string;
-  date: string; //number
-  dueDate: string; //number
+  date: string;
+  dueDate: string;
   shippingAddress: string;
   invoiceNote: string;
   description: string;
@@ -69,6 +69,7 @@ const Invoices: React.FC = () => {
   };
 
   const handleEditInvoice = (invoice: Invoice) => {
+    console.log("Invoice being edited:", invoice);
     setSelectedInvoice(invoice);
     setIsInvoiceFormOpen(true);
   };
@@ -83,8 +84,6 @@ const Invoices: React.FC = () => {
     }
   };
 
-//  console.log(selectedInvoice)
- 
   const handleDownloadPDF = (invoice: Invoice) => {
     // const doc = new jsPDF();
     const doc = new PDFWithAutoTable();
@@ -247,7 +246,7 @@ const Invoices: React.FC = () => {
                     </button>
 
                     <button className="bg-green-500 px-2 py-2 rounded text-white hover:bg-green-600 ml-4"
-                      onClick={() => handleEditInvoice(invoice?.attributes)}>
+                      onClick={() => handleEditInvoice(invoice)}>
                       Edit invoice
                     </button>
                   </div>

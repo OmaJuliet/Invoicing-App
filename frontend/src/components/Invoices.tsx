@@ -140,7 +140,7 @@ const Invoices: React.FC = () => {
 
 
       {invoices.length === 0 ? (
-        <p>No invoice yet.</p>
+        <p className="text-lg">No invoice found.</p>
       ) : (
 
         <div className="w-[70%]">
@@ -150,38 +150,38 @@ const Invoices: React.FC = () => {
                 <div className="flex flex-wrap border-t-2 border-b-2 border-gray-200 border-opacity-60" key={invoice.id}>
                   <div className="lg:w-1/3 md:w-full px-8 py-6 border-opacity-60">
                     <div>
-                      <h2 className="text-base text-gray-900 font-medium mb-1">Issued:</h2>
-                      <p className="leading-relaxed text-sm mb-4">{invoice.attributes.date}</p>
+                      <h2 className="text-lg text-gray-900 font-medium mb-1">Issued:</h2>
+                      <p className="leading-relaxed text-base mb-4">{invoice.attributes.date}</p>
                     </div>
                     <div className="mt-12">
-                      <h2 className="text-base text-gray-900 font-medium">Due:</h2>
-                      <p className="leading-relaxed text-sm mb-4">{invoice.attributes.dueDate}</p>
+                      <h2 className="text-lg text-gray-900 font-medium">Due:</h2>
+                      <p className="leading-relaxed text-base mb-4">{invoice.attributes.dueDate}</p>
                     </div>
                   </div>
 
                   <div className="lg:w-1/3 md:w-full px-8 py-6 border-l-2 border-gray-200 border-opacity-60">
-                    <h2 className="text-base text-gray-900 font-medium mb-2">Billed To:</h2>
+                    <h2 className="text-lg text-gray-900 font-medium mb-2">Billed To:</h2>
                     <div className="">
-                      <h2 className=" text-gray-900 text-sm mb-1 font-medium">Recipient's Email</h2>
-                      <p className="leading-relaxed text-sm mb-5">{invoice.attributes.recipientEmail}</p>
+                      <h2 className=" text-gray-900 text-base mb-1 font-medium">Recipient's Email</h2>
+                      <p className="leading-relaxed text-base mb-5">{invoice.attributes.recipientEmail}</p>
                     </div>
 
                     <div>
-                      <h2 className=" text-gray-900 text-sm mb-1 font-medium">Shipping Address</h2>
-                      <p className="leading-relaxed text-sm mb-4">{invoice.attributes.shippingAddress}</p>
+                      <h2 className=" text-gray-900 text-base mb-1 font-medium">Shipping Address</h2>
+                      <p className="leading-relaxed text-base mb-4">{invoice.attributes.shippingAddress}</p>
                     </div>
                   </div>
 
                   <div className="lg:w-1/3 md:w-full px-8 py-6 border-l-2 border-gray-200 border-opacity-60">
-                    <h2 className="text-base text-gray-900 font-medium mb-2">From:</h2>
+                    <h2 className="text-lg text-gray-900 font-medium mb-2">From:</h2>
                     <div className="">
-                      <h2 className=" text-gray-900 text-sm mb-1 font-medium">Sender's Name</h2>
-                      <p className="leading-relaxed text-sm mb-5">{invoice.attributes.name}</p>
+                      <h2 className=" text-gray-900 text-base mb-1 font-medium">Sender's Name</h2>
+                      <p className="leading-relaxed text-base mb-5">{invoice.attributes.name}</p>
                     </div>
 
                     <div>
-                      <h2 className=" text-gray-900 text-sm mb-1 font-medium">Sender's Email</h2>
-                      <p className="leading-relaxed text-sm mb-4">{invoice.attributes.senderEmail}</p>
+                      <h2 className=" text-gray-900 text-base mb-1 font-medium">Sender's Email</h2>
+                      <p className="leading-relaxed text-base mb-4">{invoice.attributes.senderEmail}</p>
                     </div>
                   </div>
                 </div>

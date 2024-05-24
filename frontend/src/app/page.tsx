@@ -2,7 +2,6 @@
 import Invoices from "../components/Invoices";
 
 
-
 function App() {
     return (
         <div className="p-5">

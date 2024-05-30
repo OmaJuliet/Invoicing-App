@@ -1,0 +1,75 @@
+services:
+  frontend:
+    container_name: invoice-client
+    build: ./frontend
+    image: invoice-client:latest
+    restart: unless-stopped
+    environment:
+      - NEXT_PUBLIC_STRAPI_BACKEND_SERVER=${NEXT_PUBLIC_STRAPI_BACKEND_SERVER}
+    ports:
+      - "3333:3000"
+    networks:
+      - proxy-net
+    depends_on:
+      - backend
+
+  backend:
+    container_name: invoice-server
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    image: invoice-server:latest
+    restart: unless-stopped
+    env_file: ./backend/.env
+    environment:
+      DATABASE_CLIENT: ${DATABASE_CLIENT}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      APP_KEYS: ${APP_KEYS}
+      NODE_ENV: ${NODE_ENV}
+    volumes:
+      - ./backend/config:/opt/app/config
+      - ./backend/src:/opt/app/src
+      - ./backend/package.json:/opt/package.json
+      - ./backend/yarn.lock:/opt/yarn.lock
+      - ./backend/.env:/opt/app/.env
+      - ./backend/public/uploads:/opt/app/public/uploads
+    ports:
+      - "1337:1337"
+    networks:
+      - proxy-net
+    depends_on:
+      - database
+
+  database:
+    container_name: invoice-database
+    platform: linux/amd64 #for platform error on Apple M1 chips
+    restart: unless-stopped
+    env_file: ./backend/.env
+    image: postgres:15.5-alpine
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - strapi-data:/var/lib/postgresql/data/ #using a volume
+      #- ./data:/var/lib/postgresql/data/ # if you want to use a bind folder
+
+    ports:
+      - "5432:5432"
+    networks:
+      - proxy-net
+
+volumes:
+  strapi-data:
+
+networks:
+  proxy-net:
+    name: proxy-net
+    driver: bridge
+    external: true
